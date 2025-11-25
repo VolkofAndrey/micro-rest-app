@@ -39,6 +39,11 @@ export default function App() {
     }
   };
 
+  const handleHomeClick = () => {
+    store.setHomeMode('INITIAL');
+    store.setCurrentView('HOME');
+  };
+
   return (
     <div className={`min-h-screen bg-gray-50 dark:bg-darkbg text-gray-900 dark:text-gray-100 flex flex-col transition-colors duration-300 font-sans ${store.isDarkMode ? 'dark' : ''}`}>
       
@@ -76,7 +81,11 @@ export default function App() {
 
       {store.currentView !== 'ACTIVITY' && (
         <div className="max-w-md mx-auto w-full relative">
-           <NavigationBar currentView={store.currentView} onChange={store.setCurrentView} />
+           <NavigationBar 
+             currentView={store.currentView} 
+             onChange={store.setCurrentView} 
+             onHomeClick={handleHomeClick}
+           />
         </div>
       )}
     </div>

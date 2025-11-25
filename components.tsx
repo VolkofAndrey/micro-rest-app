@@ -3,10 +3,14 @@ import { Home, History as HistoryIcon, Heart, ArrowLeft, Sun, Moon, Leaf, User, 
 import { motion, AnimatePresence } from 'framer-motion';
 import { haptic } from './utils';
 
-export const NavigationBar = ({ currentView, onChange }: { currentView: string, onChange: (v: any) => void }) => (
+export const NavigationBar = ({ currentView, onChange, onHomeClick }: { currentView: string, onChange: (v: any) => void, onHomeClick?: () => void }) => (
   <div className="fixed bottom-0 left-0 right-0 bg-white/90 dark:bg-carddark/90 backdrop-blur-lg border-t border-gray-100 dark:border-gray-800 pb-safe-area pt-2 px-6 flex justify-between items-center z-50 h-20 shadow-[0_-8px_30px_rgba(0,0,0,0.04)] rounded-t-3xl">
     <button 
-      onClick={() => { haptic('light'); onChange('HOME'); }}
+      onClick={() => { 
+        haptic('light'); 
+        if (onHomeClick) onHomeClick();
+        else onChange('HOME'); 
+      }}
       className={`flex flex-col items-center gap-1.5 transition-colors ${currentView === 'HOME' ? 'text-primary' : 'text-gray-300 dark:text-gray-600'}`}
       aria-label="Главная"
     >
@@ -59,15 +63,8 @@ export const Header = ({ title, showBack, onBack, isDarkMode, toggleTheme, onCha
       <h1 className="text-xl font-bold text-gray-800 dark:text-white truncate max-w-[200px] tracking-tight">{title}</h1>
     </div>
     
-    <div className="flex items-center gap-2">
-      <button 
-        onClick={() => { haptic('light'); onChangeView('PROFILE'); }}
-        className="p-2.5 rounded-full bg-white dark:bg-carddark text-gray-400 dark:text-gray-300 shadow-sm border border-gray-100 dark:border-gray-700 hover:text-primary transition-colors"
-        aria-label="Профиль"
-      >
-        <User size={20} />
-      </button>
-    </div>
+    {/* Right side Profile button removed as requested */}
+    <div className="w-8"></div>
   </header>
 );
 
