@@ -1,7 +1,9 @@
+
 import React, { lazy, Suspense, useState, useEffect } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { useAppStore } from './store';
 import { Header, NavigationBar, OnboardingModal } from './components';
+import { getActivityById } from './data';
 
 // Lazy load views for better performance
 const HomeView = lazy(() => import('./views/HomeView'));
@@ -22,11 +24,30 @@ export default function App() {
   const [showOnboarding, setShowOnboarding] = useState(false);
 
   useEffect(() => {
+    // Onboarding Check
     const hasOnboarded = localStorage.getItem('microrest_onboarding_done');
     if (!hasOnboarded) {
       setShowOnboarding(true);
     }
-  }, []);
+
+    // Deep Link Handling (Web equivalent)
+    // If the app is opened via URL like /?activity=breathing-478
+    const handleDeepLink = () => {
+      const params = new URLSearchParams(window.location.search);
+      const activityId = params.get('activity');
+      if (activityId) {
+        const activity = getActivityById(activityId);
+        if (activity) {
+          store.setSelectedActivity(activity);
+          store.setCurrentView('ACTIVITY');
+          // Clean URL without refresh
+          window.history.replaceState({}, document.title, window.location.pathname);
+        }
+      }
+    };
+
+    handleDeepLink();
+  }, []); // Run once on mount
 
   const getTitle = () => {
     switch(store.currentView) {

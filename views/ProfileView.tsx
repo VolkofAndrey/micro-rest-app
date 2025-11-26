@@ -1,11 +1,38 @@
-import React from 'react';
+
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Moon, Sun, Award, Zap, Heart } from 'lucide-react';
+import { Moon, Sun, Award, Zap, Heart, Bell } from 'lucide-react';
 import { ACHIEVEMENTS, checkAchievements } from '../data';
 import { haptic } from '../utils';
+import { APP_VERSION } from '../constants';
+import { requestNotificationPermission } from '../permissions';
 
 const ProfileView = ({ store }: { store: any }) => {
   const unlocked = checkAchievements(store.history, store.streak);
+  const [notificationsEnabled, setNotificationsEnabled] = useState(false);
+
+  useEffect(() => {
+    if ('Notification' in window && Notification.permission === 'granted') {
+      setNotificationsEnabled(true);
+    }
+  }, []);
+
+  const handleNotificationToggle = async () => {
+    haptic('light');
+    if (!notificationsEnabled) {
+      const granted = await requestNotificationPermission();
+      if (granted) {
+        setNotificationsEnabled(true);
+        new Notification('Микро-отдых', { body: 'Уведомления включены! Мы напомним вам отдохнуть.' });
+      } else {
+        alert('Не удалось включить уведомления. Проверьте настройки браузера.');
+      }
+    } else {
+      // We cannot revoke permissions via JS, just update UI state
+      setNotificationsEnabled(false);
+      alert('Чтобы полностью отключить уведомления, измените настройки сайта в браузере.');
+    }
+  };
   
   return (
     <motion.div 
@@ -78,7 +105,9 @@ const ProfileView = ({ store }: { store: any }) => {
       {/* Settings Section */}
       <div>
         <h3 className="font-bold text-lg mb-4 text-gray-900 dark:text-white">Настройки</h3>
-        <div className="bg-white dark:bg-carddark p-5 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800">
+        <div className="bg-white dark:bg-carddark p-5 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 space-y-6">
+          
+          {/* Theme Toggle */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
                <div className={`p-2 rounded-full ${store.isDarkMode ? 'bg-indigo-900 text-yellow-300' : 'bg-orange-100 text-orange-500'}`}>
@@ -99,11 +128,31 @@ const ProfileView = ({ store }: { store: any }) => {
               <div className={`absolute top-1 left-1 w-5 h-5 bg-white rounded-full shadow-md transform transition-transform duration-200 ${store.isDarkMode ? 'translate-x-5' : 'translate-x-0'}`} />
             </button>
           </div>
+
+          {/* Notification Toggle */}
+          <div className="flex items-center justify-between border-t border-gray-100 dark:border-gray-800 pt-6">
+            <div className="flex items-center gap-3">
+               <div className={`p-2 rounded-full ${notificationsEnabled ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-500'}`}>
+                  <Bell size={20} />
+               </div>
+               <div>
+                  <h4 className="font-bold text-gray-900 dark:text-gray-100">Напоминания</h4>
+                  <p className="text-xs text-gray-500">Предлагать отдых</p>
+               </div>
+            </div>
+            <button
+              onClick={handleNotificationToggle}
+              className={`w-12 h-7 rounded-full transition-colors relative focus:outline-none focus:ring-2 focus:ring-primary ${notificationsEnabled ? 'bg-green-500' : 'bg-gray-300'}`}
+            >
+              <div className={`absolute top-1 left-1 w-5 h-5 bg-white rounded-full shadow-md transform transition-transform duration-200 ${notificationsEnabled ? 'translate-x-5' : 'translate-x-0'}`} />
+            </button>
+          </div>
+
         </div>
       </div>
       
       <div className="text-center text-xs text-gray-400 py-4">
-        MicroRest v1.1.0 • Made for Peace
+        MicroRest v{APP_VERSION} • Made for Peace
       </div>
     </motion.div>
   );
