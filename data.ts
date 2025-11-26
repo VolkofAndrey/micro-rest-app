@@ -193,7 +193,7 @@ export const ACTIVITIES: Activity[] = [
       'Представьте, что вы в уютном домике.',
       'Слушайте капли.'
     ],
-    durationSeconds: 300,
+    durationSeconds: 180,
     science: 'Белый шум дождя маскирует отвлекающие звуки и успокаивает нервную систему.',
     category: 'AUDIO',
     audioUrl: 'https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a73467.mp3?filename=rain-112353.mp3',
@@ -209,7 +209,7 @@ export const ACTIVITIES: Activity[] = [
       'Слушайте пение птиц.',
       'Дышите глубоко и ровно.'
     ],
-    durationSeconds: 300,
+    durationSeconds: 180,
     science: 'Звуки природы снижают уровень кортизола даже при прослушивании в записи.',
     category: 'AUDIO',
     audioUrl: 'https://cdn.pixabay.com/download/audio/2021/08/09/audio_04d9c75d49.mp3?filename=forest-birds-111585.mp3',
@@ -225,7 +225,7 @@ export const ACTIVITIES: Activity[] = [
       'Слушайте треск поленьев.',
       'Позвольте мыслям сгорать в огне.'
     ],
-    durationSeconds: 300,
+    durationSeconds: 180,
     science: 'Звук костра эволюционно ассоциируется с безопасностью и племенным теплом.',
     category: 'AUDIO',
     audioUrl: 'https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0a13f69d2.mp3?filename=fireplace-2005.mp3',
@@ -241,7 +241,7 @@ export const ACTIVITIES: Activity[] = [
       'Вода уносит всё лишнее.',
       'Просто слушайте поток.'
     ],
-    durationSeconds: 300,
+    durationSeconds: 180,
     science: 'Монотонный шум воды вводит мозг в медитативное альфа-состояние.',
     category: 'AUDIO',
     audioUrl: 'https://cdn.pixabay.com/download/audio/2021/08/04/audio_bb6ddf2956.mp3?filename=river-stream-111009.mp3',
@@ -297,7 +297,7 @@ export const ACTIVITIES: Activity[] = [
       'Пауза. Повторить.',
       'Акцент только на длинном выдохе.'
     ],
-    durationSeconds: 90,
+    durationSeconds: 120,
     science: 'Удлинение выдоха напрямую активирует парасимпатическую систему успокоения.',
     category: 'BREATHING',
     tags: { 
@@ -333,7 +333,7 @@ export const ACTIVITIES: Activity[] = [
       'Медленно и плавно выдохните через рот.',
       'Повторите 10 раз.'
     ],
-    durationSeconds: 90,
+    durationSeconds: 120,
     science: 'Самый быстрый биологический способ снизить уровень углекислого газа и стресса.',
     category: 'BREATHING',
     tags: { 
@@ -557,7 +557,7 @@ export const ACTIVITIES: Activity[] = [
       'Запомните, как вы себя чувствуете.',
       'Скажите про себя: "Я запомню этот момент".'
     ],
-    durationSeconds: 30,
+    durationSeconds: 60,
     science: 'Осознанная фиксация позитива укрепляет нейронные связи счастья.',
     category: 'FOCUS',
     tags: { 
