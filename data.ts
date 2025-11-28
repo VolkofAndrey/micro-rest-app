@@ -112,7 +112,7 @@ export const getDailyChallenge = (): DailyChallenge => {
   const challenges: DailyChallenge[] = [
     { emoji: '🧘', text: 'Сделай 3 дыхательные практики', count: 3, category: 'BREATHING' },
     { emoji: '💪', text: 'Попробуй 2 активности с движением', count: 2, category: 'MOVEMENT' },
-    { emoji: '🎧', text: 'Послушай звуки природы 5 минут', count: 1, category: 'AUDIO' },
+    { emoji: '🎧', text: 'Послушай звуки природы 3 минуты', count: 1, category: 'AUDIO' },
     { emoji: '👁️', text: 'Дай глазам отдохнуть 2 раза', count: 2, category: 'VISUAL' },
     { emoji: '🎯', text: 'Верни фокус 2 раза', count: 2, category: 'FOCUS' },
   ];

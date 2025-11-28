@@ -12,17 +12,6 @@ const ActivityView = ({ store }: { store: any }) => {
   
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  // Effect to handle audio playback
-  useEffect(() => {
-    if (store.selectedActivity?.audioUrl && audioRef.current) {
-      if (isActive) {
-        audioRef.current.play().catch(e => console.log("Audio play failed (interaction needed)", e));
-      } else {
-        audioRef.current.pause();
-      }
-    }
-  }, [isActive, store.selectedActivity]);
-  
   // Timer Effect
   useEffect(() => {
     if (isActive && endTime) {
@@ -45,14 +34,34 @@ const ActivityView = ({ store }: { store: any }) => {
     }
   }, [isActive, endTime]);
 
+  // Cleanup effect
+  useEffect(() => {
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+      }
+    };
+  }, []);
+
   const toggleTimer = () => {
     haptic('medium');
+    
     if (!isActive) {
       // Start or Resume
       setEndTime(Date.now() + timeLeft * 1000);
+      
+      // Handle Audio Playback directly on user interaction
+      if (store.selectedActivity?.audioUrl && audioRef.current) {
+        audioRef.current.play().catch(e => console.log("Audio play failed (interaction needed)", e));
+      }
     } else {
       // Pause: endTime is cleared, timeLeft remains as current state
       setEndTime(null);
+      
+      // Pause Audio
+      if (store.selectedActivity?.audioUrl && audioRef.current) {
+        audioRef.current.pause();
+      }
     }
     setIsActive(!isActive);
   };
@@ -91,9 +100,15 @@ const ActivityView = ({ store }: { store: any }) => {
     >
       <div className="flex-1 overflow-y-auto px-5 pt-4 pb-24 no-scrollbar">
         
-        {/* Audio Element */}
+        {/* Audio Element - Hidden but functional */}
         {store.selectedActivity.audioUrl && (
-          <audio ref={audioRef} src={store.selectedActivity.audioUrl} loop />
+          <audio 
+            ref={audioRef} 
+            src={store.selectedActivity.audioUrl} 
+            loop 
+            preload="auto"
+            playsInline
+          />
         )}
 
         {/* Title Section - Compact */}

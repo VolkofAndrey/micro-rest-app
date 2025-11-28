@@ -1,5 +1,5 @@
 import React from 'react';
-import { Siren, Leaf, Sparkles, Wand2, Zap, ChevronLeft, ArrowRight, Clock, Heart } from 'lucide-react';
+import { Siren, Hand, Sparkles, Wand2, Zap, ChevronLeft, ArrowRight, Clock, Heart, ChevronRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { EMOTIONS_MAP, LOCATIONS_MAP, CATEGORIES_MAP, getActivitiesForContext, getActivitiesByCategory, getDailyChallenge, getActivityById, getEmotionReaction } from '../data';
 import { Emotion, LocationType, ActivityCategory } from '../types';
@@ -66,12 +66,20 @@ const HomeView = ({ store }: { store: any }) => {
       )}
 
       {/* Daily Challenge */}
-      <div className="bg-white dark:bg-carddark rounded-[2rem] p-5 shadow-sm border border-blue-100 dark:border-blue-900/30">
+      <button
+        onClick={() => {
+          haptic('light');
+          store.setSelectedCategory(challenge.category);
+          store.setHomeMode('CATEGORY_LIST');
+        }}
+        className="w-full text-left bg-white dark:bg-carddark rounded-[2rem] p-5 shadow-sm border border-blue-100 dark:border-blue-900/30 relative active:scale-[0.98] transition-transform"
+      >
         <div className="flex items-start justify-between mb-3">
           <div>
             <p className="text-xs uppercase font-bold text-blue-600 dark:text-blue-400 tracking-wider">Челлендж дня</p>
-            <p className="text-lg font-bold text-gray-900 dark:text-white mt-1">{challenge.emoji} {challenge.text}</p>
+            <p className="text-lg font-bold text-gray-900 dark:text-white mt-1 pr-6">{challenge.emoji} {challenge.text}</p>
           </div>
+          <ChevronRight className="text-gray-300 dark:text-gray-600 absolute top-5 right-5" size={20} />
         </div>
         
         <div className="flex items-center gap-2">
@@ -91,7 +99,7 @@ const HomeView = ({ store }: { store: any }) => {
             </span>
           </div>
         )}
-      </div>
+      </button>
 
       <div className="text-center my-2">
          <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-1">Режим отдыха</h2>
@@ -135,40 +143,6 @@ const HomeView = ({ store }: { store: any }) => {
             </div>
         </button>
       </div>
-
-      {/* Quick Access Bar */}
-      {store.history.length > 0 && (
-        <div className="mt-4">
-            <h3 className="text-sm font-bold text-gray-500 dark:text-gray-400 mb-3 px-1">
-            Недавние
-            </h3>
-            <div className="flex gap-3 overflow-x-auto no-scrollbar pb-2 -mx-5 px-5">
-            {Array.from(new Set(store.history.map((e: any) => e.activityId)))
-                .slice(0, 5)
-                .map((id: any) => {
-                    const activity = getActivityById(id);
-                    if (!activity) return null;
-                    
-                    return (
-                    <button
-                        key={id}
-                        onClick={() => {
-                        haptic('light');
-                        store.setSelectedActivity(activity);
-                        store.setCurrentView('ACTIVITY');
-                        }}
-                        className="flex-shrink-0 bg-white dark:bg-carddark p-3 rounded-[1.2rem] shadow-sm border border-gray-100 dark:border-gray-800 flex flex-col items-center gap-2 w-20 active:scale-95 transition-transform"
-                    >
-                        <div className="text-2xl">{activity.emoji}</div>
-                        <p className="text-[10px] font-medium text-gray-600 dark:text-gray-300 text-center line-clamp-1 w-full overflow-hidden">
-                        {activity.title}
-                        </p>
-                    </button>
-                    );
-                })}
-            </div>
-        </div>
-      )}
 
       {/* SOS Button */}
       <div className="pt-4">
@@ -377,10 +351,10 @@ const HomeView = ({ store }: { store: any }) => {
        {store.homeMode === 'INITIAL' && (
         <div className="flex flex-col items-center justify-center space-y-2 mb-6 mt-2">
             <div className="p-4 bg-indigo-50 dark:bg-indigo-900/20 rounded-full text-primary mb-1 animate-float shadow-sm">
-            <Leaf size={36} />
+            <Hand size={36} />
             </div>
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white text-center tracking-tight">
-            Привет, Микро-отдых
+            Привет, друг
             </h1>
         </div>
        )}
