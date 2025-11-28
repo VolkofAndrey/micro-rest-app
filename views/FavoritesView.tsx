@@ -7,21 +7,26 @@ import { haptic } from '../utils';
 const FavoritesView = ({ store }: { store: any }) => {
   if (store.favorites.length === 0) {
     return (
-      <div className="h-full flex flex-col items-center justify-center text-gray-400 px-8 text-center pb-20">
-        <Heart size={64} strokeWidth={1} className="mb-4 opacity-50" />
-        <p>Сохраняйте любимые техники, чтобы не потерять их.</p>
+      <div className="h-full flex flex-col pt-safe px-4 pb-24">
+         <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 mt-2 px-1">Избранное</h2>
+         <div className="flex-1 flex flex-col items-center justify-center text-gray-400 text-center -mt-20">
+            <Heart size={64} strokeWidth={1} className="mb-4 opacity-50" />
+            <p>Сохраняйте любимые техники, чтобы не потерять их.</p>
+         </div>
       </div>
     );
   }
 
   return (
     <motion.div 
-      className="pb-24 px-4 pt-4 space-y-4"
+      className="pb-24 px-4 pt-safe space-y-4"
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -20 }}
       transition={{ duration: 0.2 }}
     >
+      <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4 mt-2 px-1">Избранное</h2>
+      
       {store.favorites.map((id: string) => {
         const activity = getActivityById(id);
         if (!activity) return null;

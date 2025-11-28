@@ -31,21 +31,26 @@ const HistoryView = ({ store }: { store: any }) => {
 
   if (store.history.length === 0) {
     return (
-      <div className="h-full flex flex-col items-center justify-center text-gray-400 px-8 text-center pb-20">
-        <HistoryIcon size={64} strokeWidth={1} className="mb-4 opacity-50" />
-        <p>Здесь появится история ваших микро-отдыхов.</p>
+      <div className="h-full flex flex-col pt-safe px-4 pb-24">
+         <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 mt-2 px-1">История</h2>
+         <div className="flex-1 flex flex-col items-center justify-center text-gray-400 text-center -mt-20">
+            <HistoryIcon size={64} strokeWidth={1} className="mb-4 opacity-50" />
+            <p>Здесь появится история ваших микро-отдыхов.</p>
+         </div>
       </div>
     );
   }
 
   return (
     <motion.div 
-      className="h-full flex flex-col pb-24 px-4 pt-4"
+      className="h-full flex flex-col pb-24 px-4 pt-safe"
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -20 }}
       transition={{ duration: 0.2 }}
     >
+       <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4 mt-2 px-1">История</h2>
+       
        {/* Search Bar */}
        <div className="relative mb-4">
          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">

@@ -42,16 +42,17 @@ export interface DailyChallenge {
 }
 
 export type ViewState = 'HOME' | 'ACTIVITY' | 'HISTORY' | 'FAVORITES' | 'PROFILE';
-export type HomeMode = 'INITIAL' | 'GUIDED' | 'QUICK';
+export type HomeMode = 'INITIAL' | 'GUIDED' | 'QUICK' | 'CATEGORY_LIST';
 
 export interface AppState {
   currentView: ViewState;
   homeMode: HomeMode;
+  selectedLocation: LocationType;
+  selectedCategory: ActivityCategory | null;
   selectedActivity: Activity | null;
   history: HistoryEntry[];
   favorites: string[]; // List of activity IDs
   isDarkMode: boolean;
-  selectedLocation: LocationType;
   lastUsedIds: string[]; // Memory for smart recommendation
   streak: number;
   lastActivityDate: string;

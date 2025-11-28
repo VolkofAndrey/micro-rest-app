@@ -1,4 +1,3 @@
-
 import React, { lazy, Suspense, useState, useEffect } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { useAppStore } from './store';
@@ -31,7 +30,6 @@ export default function App() {
     }
 
     // Deep Link Handling (Web equivalent)
-    // If the app is opened via URL like /?activity=breathing-478
     const handleDeepLink = () => {
       const params = new URLSearchParams(window.location.search);
       const activityId = params.get('activity');
@@ -40,25 +38,13 @@ export default function App() {
         if (activity) {
           store.setSelectedActivity(activity);
           store.setCurrentView('ACTIVITY');
-          // Clean URL without refresh
           window.history.replaceState({}, document.title, window.location.pathname);
         }
       }
     };
 
     handleDeepLink();
-  }, []); // Run once on mount
-
-  const getTitle = () => {
-    switch(store.currentView) {
-      case 'HOME': return 'MicroRest';
-      case 'HISTORY': return 'История';
-      case 'FAVORITES': return 'Избранное';
-      case 'ACTIVITY': return 'Практика';
-      case 'PROFILE': return 'Профиль';
-      default: return 'App';
-    }
-  };
+  }, []);
 
   const handleHomeClick = () => {
     store.setHomeMode('INITIAL');
@@ -66,7 +52,7 @@ export default function App() {
   };
 
   return (
-    <div className={`min-h-screen bg-gray-50 dark:bg-darkbg text-gray-900 dark:text-gray-100 flex flex-col transition-colors duration-300 font-sans ${store.isDarkMode ? 'dark' : ''}`}>
+    <div className={`h-full w-full bg-surface dark:bg-darkbg text-gray-900 dark:text-gray-100 flex flex-col transition-colors duration-300 font-sans ${store.isDarkMode ? 'dark' : ''}`}>
       
       <AnimatePresence>
         {showOnboarding && (
@@ -79,29 +65,34 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      <Header 
-        title={getTitle()} 
-        showBack={store.currentView === 'ACTIVITY'}
-        onBack={() => store.setCurrentView('HOME')}
-        isDarkMode={store.isDarkMode}
-        toggleTheme={() => store.setIsDarkMode(!store.isDarkMode)}
-        onChangeView={store.setCurrentView}
-      />
+      {/* Header is only shown for Activity View now */}
+      {store.currentView === 'ACTIVITY' && (
+        <Header 
+          title="Практика" 
+          showBack={true}
+          onBack={() => store.setCurrentView('HOME')}
+          isDarkMode={store.isDarkMode}
+          toggleTheme={() => store.setIsDarkMode(!store.isDarkMode)}
+          onChangeView={store.setCurrentView}
+        />
+      )}
       
-      <main className="flex-1 relative max-w-md mx-auto w-full bg-gray-50 dark:bg-darkbg min-h-screen overflow-hidden">
-        <Suspense fallback={<Loading />}>
-          <AnimatePresence mode="wait">
-            {store.currentView === 'HOME' && <HomeView key="home" store={store} />}
-            {store.currentView === 'ACTIVITY' && <ActivityView key="activity" store={store} />}
-            {store.currentView === 'HISTORY' && <HistoryView key="history" store={store} />}
-            {store.currentView === 'FAVORITES' && <FavoritesView key="favorites" store={store} />}
-            {store.currentView === 'PROFILE' && <ProfileView key="profile" store={store} />}
-          </AnimatePresence>
-        </Suspense>
+      <main className="flex-1 w-full max-w-lg mx-auto overflow-hidden relative">
+        <div className="h-full overflow-y-auto no-scrollbar scroll-smooth">
+            <Suspense fallback={<Loading />}>
+            <AnimatePresence mode="wait">
+                {store.currentView === 'HOME' && <HomeView key="home" store={store} />}
+                {store.currentView === 'ACTIVITY' && <ActivityView key="activity" store={store} />}
+                {store.currentView === 'HISTORY' && <HistoryView key="history" store={store} />}
+                {store.currentView === 'FAVORITES' && <FavoritesView key="favorites" store={store} />}
+                {store.currentView === 'PROFILE' && <ProfileView key="profile" store={store} />}
+            </AnimatePresence>
+            </Suspense>
+        </div>
       </main>
 
       {store.currentView !== 'ACTIVITY' && (
-        <div className="max-w-md mx-auto w-full relative">
+        <div className="w-full max-w-lg mx-auto">
            <NavigationBar 
              currentView={store.currentView} 
              onChange={store.setCurrentView} 

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { HistoryEntry, LocationType, ViewState, Activity, Emotion, HomeMode } from './types';
+import { HistoryEntry, LocationType, ViewState, Activity, Emotion, HomeMode, ActivityCategory } from './types';
 import { ACTIVITIES } from './data';
 
 const STORAGE_KEYS = {
@@ -16,6 +16,7 @@ export const useAppStore = () => {
   const [currentView, setCurrentView] = useState<ViewState>('HOME');
   const [homeMode, setHomeMode] = useState<HomeMode>('INITIAL');
   const [selectedLocation, setSelectedLocation] = useState<LocationType>('HOME');
+  const [selectedCategory, setSelectedCategory] = useState<ActivityCategory | null>(null);
   const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null);
   
   const [history, setHistory] = useState<HistoryEntry[]>(() => {
@@ -177,6 +178,8 @@ export const useAppStore = () => {
     setHomeMode,
     selectedLocation,
     setSelectedLocation,
+    selectedCategory,
+    setSelectedCategory,
     selectedActivity,
     setSelectedActivity,
     history,

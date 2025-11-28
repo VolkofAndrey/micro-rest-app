@@ -1,7 +1,6 @@
-
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Moon, Sun, Award, Zap, Heart, Bell } from 'lucide-react';
+import { Moon, Sun, Award, Zap, Heart, Bell, ChevronRight } from 'lucide-react';
 import { ACHIEVEMENTS, checkAchievements } from '../data';
 import { haptic } from '../utils';
 import { APP_VERSION } from '../constants';
@@ -28,7 +27,6 @@ const ProfileView = ({ store }: { store: any }) => {
         alert('Не удалось включить уведомления. Проверьте настройки браузера.');
       }
     } else {
-      // We cannot revoke permissions via JS, just update UI state
       setNotificationsEnabled(false);
       alert('Чтобы полностью отключить уведомления, измените настройки сайта в браузере.');
     }
@@ -36,45 +34,45 @@ const ProfileView = ({ store }: { store: any }) => {
   
   return (
     <motion.div 
-      className="pb-32 px-5 pt-6 space-y-8 overflow-y-auto h-full no-scrollbar"
+      className="pb-40 px-5 pt-safe space-y-8"
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -20 }}
       transition={{ duration: 0.2 }}
     >
-      <div className="flex items-center gap-4">
-        <div className="w-20 h-20 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-3xl shadow-lg">
+      <div className="flex items-center gap-5 mt-2">
+        <div className="w-20 h-20 rounded-full bg-surface dark:bg-surface-dark border border-gray-100 dark:border-gray-700 flex items-center justify-center text-4xl shadow-sm">
            👋
         </div>
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Мой Профиль</h2>
-          <p className="text-gray-500 text-sm">Ваш путь к спокойствию</p>
+          <h2 className="text-3xl font-bold text-gray-900 dark:text-white">Профиль</h2>
+          <p className="text-gray-500 text-sm mt-1">Твой прогресс и настройки</p>
         </div>
       </div>
 
       {/* Stats Grid */}
       <div className="grid grid-cols-3 gap-3">
-        <div className="bg-white dark:bg-carddark p-4 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 text-center">
-           <Zap className="mx-auto text-orange-400 mb-2" size={24} />
+        <div className="bg-white dark:bg-carddark p-4 rounded-[1.5rem] shadow-sm border border-gray-100 dark:border-gray-800 text-center flex flex-col items-center justify-center aspect-square">
+           <Zap className="text-orange-400 mb-2" size={28} />
            <p className="text-2xl font-bold">{store.streak}</p>
-           <p className="text-[10px] uppercase text-gray-400 font-bold tracking-wider">Серия дней</p>
+           <p className="text-[10px] uppercase text-gray-400 font-bold tracking-wider mt-1">Серия</p>
         </div>
-        <div className="bg-white dark:bg-carddark p-4 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 text-center">
-           <Award className="mx-auto text-purple-400 mb-2" size={24} />
+        <div className="bg-white dark:bg-carddark p-4 rounded-[1.5rem] shadow-sm border border-gray-100 dark:border-gray-800 text-center flex flex-col items-center justify-center aspect-square">
+           <Award className="text-purple-400 mb-2" size={28} />
            <p className="text-2xl font-bold">{store.history.length}</p>
-           <p className="text-[10px] uppercase text-gray-400 font-bold tracking-wider">Практик</p>
+           <p className="text-[10px] uppercase text-gray-400 font-bold tracking-wider mt-1">Практик</p>
         </div>
-        <div className="bg-white dark:bg-carddark p-4 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 text-center">
-           <Heart className="mx-auto text-red-400 mb-2" size={24} />
+        <div className="bg-white dark:bg-carddark p-4 rounded-[1.5rem] shadow-sm border border-gray-100 dark:border-gray-800 text-center flex flex-col items-center justify-center aspect-square">
+           <Heart className="text-red-400 mb-2" size={28} />
            <p className="text-2xl font-bold">{store.favorites.length}</p>
-           <p className="text-[10px] uppercase text-gray-400 font-bold tracking-wider">Любимых</p>
+           <p className="text-[10px] uppercase text-gray-400 font-bold tracking-wider mt-1">Любимых</p>
         </div>
       </div>
 
       {/* Achievements Section */}
       <div>
-        <h3 className="font-bold text-lg mb-4 text-gray-900 dark:text-white flex items-center gap-2">
-          <Award size={20} className="text-primary" /> Достижения
+        <h3 className="font-bold text-xl mb-4 text-gray-900 dark:text-white flex items-center gap-2 px-1">
+          Достижения
         </h3>
         <div className="grid grid-cols-2 gap-3">
           {ACHIEVEMENTS.map(ach => {
@@ -82,20 +80,20 @@ const ProfileView = ({ store }: { store: any }) => {
             return (
               <div 
                 key={ach.id}
-                className={`p-4 rounded-2xl border transition-all ${
+                className={`p-4 rounded-[1.5rem] border transition-all ${
                   isUnlocked 
-                    ? 'bg-gradient-to-br from-yellow-50 to-orange-50 dark:from-yellow-900/10 dark:to-orange-900/10 border-yellow-200 dark:border-yellow-800' 
-                    : 'bg-gray-50 dark:bg-gray-800 border-transparent opacity-60 grayscale'
+                    ? 'bg-amber-50 dark:bg-amber-900/10 border-amber-100 dark:border-amber-800/30' 
+                    : 'bg-gray-50 dark:bg-gray-800 border-transparent opacity-60'
                 }`}
               >
                 <div className="flex justify-between items-start mb-2">
-                   <div className="text-3xl">{isUnlocked ? ach.emoji : '🔒'}</div>
-                   {isUnlocked && <div className="bg-yellow-400 w-2 h-2 rounded-full shadow-[0_0_8px_rgba(250,204,21,0.6)]"></div>}
+                   <div className="text-3xl filter drop-shadow-sm">{isUnlocked ? ach.emoji : '🔒'}</div>
+                   {isUnlocked && <Award size={16} className="text-amber-500" />}
                 </div>
-                <h4 className={`font-bold text-sm ${isUnlocked ? 'text-gray-900 dark:text-yellow-100' : 'text-gray-500'}`}>
+                <h4 className={`font-bold text-sm leading-tight ${isUnlocked ? 'text-gray-900 dark:text-amber-100' : 'text-gray-500'}`}>
                   {ach.title}
                 </h4>
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 leading-tight">{ach.desc}</p>
+                <p className="text-[10px] text-gray-500 dark:text-gray-400 mt-1 leading-tight">{ach.desc}</p>
               </div>
             );
           })}
@@ -104,55 +102,48 @@ const ProfileView = ({ store }: { store: any }) => {
 
       {/* Settings Section */}
       <div>
-        <h3 className="font-bold text-lg mb-4 text-gray-900 dark:text-white">Настройки</h3>
-        <div className="bg-white dark:bg-carddark p-5 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 space-y-6">
+        <h3 className="font-bold text-xl mb-4 text-gray-900 dark:text-white px-1">Настройки</h3>
+        <div className="bg-white dark:bg-carddark rounded-[2rem] shadow-sm border border-gray-100 dark:border-gray-800 overflow-hidden">
           
           {/* Theme Toggle */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-               <div className={`p-2 rounded-full ${store.isDarkMode ? 'bg-indigo-900 text-yellow-300' : 'bg-orange-100 text-orange-500'}`}>
-                  {store.isDarkMode ? <Moon size={20} /> : <Sun size={20} />}
+          <div className="p-5 flex items-center justify-between active:bg-gray-50 dark:active:bg-gray-800 transition-colors cursor-pointer" onClick={() => store.setIsDarkMode(!store.isDarkMode)}>
+            <div className="flex items-center gap-4">
+               <div className="text-gray-500 dark:text-gray-400">
+                  {store.isDarkMode ? <Moon size={24} /> : <Sun size={24} />}
                </div>
                <div>
-                  <h4 className="font-bold text-gray-900 dark:text-gray-100">Тёмная тема</h4>
+                  <h4 className="font-medium text-lg text-gray-900 dark:text-gray-100">Тёмная тема</h4>
                   <p className="text-xs text-gray-500">Снижает нагрузку на глаза</p>
                </div>
             </div>
-            <button
-              onClick={() => {
-                haptic('light');
-                store.setIsDarkMode(!store.isDarkMode);
-              }}
-              className={`w-12 h-7 rounded-full transition-colors relative focus:outline-none focus:ring-2 focus:ring-primary ${store.isDarkMode ? 'bg-primary' : 'bg-gray-300'}`}
-            >
+            <div className={`w-12 h-7 rounded-full transition-colors relative ${store.isDarkMode ? 'bg-primary' : 'bg-gray-200 dark:bg-gray-700'}`}>
               <div className={`absolute top-1 left-1 w-5 h-5 bg-white rounded-full shadow-md transform transition-transform duration-200 ${store.isDarkMode ? 'translate-x-5' : 'translate-x-0'}`} />
-            </button>
+            </div>
           </div>
 
+          <div className="h-px bg-gray-100 dark:bg-gray-800 mx-5" />
+
           {/* Notification Toggle */}
-          <div className="flex items-center justify-between border-t border-gray-100 dark:border-gray-800 pt-6">
-            <div className="flex items-center gap-3">
-               <div className={`p-2 rounded-full ${notificationsEnabled ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-500'}`}>
-                  <Bell size={20} />
+          <div className="p-5 flex items-center justify-between active:bg-gray-50 dark:active:bg-gray-800 transition-colors cursor-pointer" onClick={handleNotificationToggle}>
+            <div className="flex items-center gap-4">
+               <div className="text-gray-500 dark:text-gray-400">
+                  <Bell size={24} />
                </div>
                <div>
-                  <h4 className="font-bold text-gray-900 dark:text-gray-100">Напоминания</h4>
+                  <h4 className="font-medium text-lg text-gray-900 dark:text-gray-100">Напоминания</h4>
                   <p className="text-xs text-gray-500">Предлагать отдых</p>
                </div>
             </div>
-            <button
-              onClick={handleNotificationToggle}
-              className={`w-12 h-7 rounded-full transition-colors relative focus:outline-none focus:ring-2 focus:ring-primary ${notificationsEnabled ? 'bg-green-500' : 'bg-gray-300'}`}
-            >
+            <div className={`w-12 h-7 rounded-full transition-colors relative ${notificationsEnabled ? 'bg-primary' : 'bg-gray-200 dark:bg-gray-700'}`}>
               <div className={`absolute top-1 left-1 w-5 h-5 bg-white rounded-full shadow-md transform transition-transform duration-200 ${notificationsEnabled ? 'translate-x-5' : 'translate-x-0'}`} />
-            </button>
+            </div>
           </div>
 
         </div>
       </div>
       
-      <div className="text-center text-xs text-gray-400 py-4">
-        MicroRest v{APP_VERSION} • Made for Peace
+      <div className="text-center text-xs text-gray-400 py-6">
+        MicroRest v{APP_VERSION} • Android Edition
       </div>
     </motion.div>
   );

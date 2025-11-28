@@ -3,68 +3,66 @@ import { Home, History as HistoryIcon, Heart, ArrowLeft, Sun, Moon, Leaf, User, 
 import { motion, AnimatePresence } from 'framer-motion';
 import { haptic } from './utils';
 
-export const NavigationBar = ({ currentView, onChange, onHomeClick }: { currentView: string, onChange: (v: any) => void, onHomeClick?: () => void }) => (
-  <div className="fixed bottom-0 left-0 right-0 bg-white/90 dark:bg-carddark/90 backdrop-blur-lg border-t border-gray-100 dark:border-gray-800 pb-safe-area pt-2 px-6 flex justify-between items-center z-50 h-20 shadow-[0_-8px_30px_rgba(0,0,0,0.04)] rounded-t-3xl">
-    <button 
-      onClick={() => { 
-        haptic('light'); 
-        if (onHomeClick) onHomeClick();
-        else onChange('HOME'); 
-      }}
-      className={`flex flex-col items-center gap-1.5 transition-colors ${currentView === 'HOME' ? 'text-primary' : 'text-gray-300 dark:text-gray-600'}`}
-      aria-label="Главная"
-    >
-      <Home size={26} strokeWidth={currentView === 'HOME' ? 2.5 : 2} />
-      {currentView === 'HOME' && <span className="w-1 h-1 rounded-full bg-primary"></span>}
-    </button>
-    <button 
-      onClick={() => { haptic('light'); onChange('HISTORY'); }}
-      className={`flex flex-col items-center gap-1.5 transition-colors ${currentView === 'HISTORY' ? 'text-primary' : 'text-gray-300 dark:text-gray-600'}`}
-      aria-label="История"
-    >
-      <HistoryIcon size={26} strokeWidth={currentView === 'HISTORY' ? 2.5 : 2} />
-      {currentView === 'HISTORY' && <span className="w-1 h-1 rounded-full bg-primary"></span>}
-    </button>
-    <button 
-      onClick={() => { haptic('light'); onChange('FAVORITES'); }}
-      className={`flex flex-col items-center gap-1.5 transition-colors ${currentView === 'FAVORITES' ? 'text-primary' : 'text-gray-300 dark:text-gray-600'}`}
-      aria-label="Избранное"
-    >
-      <Heart size={26} strokeWidth={currentView === 'FAVORITES' ? 2.5 : 2} />
-      {currentView === 'FAVORITES' && <span className="w-1 h-1 rounded-full bg-primary"></span>}
-    </button>
-     <button 
-      onClick={() => { haptic('light'); onChange('PROFILE'); }}
-      className={`flex flex-col items-center gap-1.5 transition-colors ${currentView === 'PROFILE' ? 'text-primary' : 'text-gray-300 dark:text-gray-600'}`}
-      aria-label="Профиль"
-    >
-      <User size={26} strokeWidth={currentView === 'PROFILE' ? 2.5 : 2} />
-      {currentView === 'PROFILE' && <span className="w-1 h-1 rounded-full bg-primary"></span>}
-    </button>
-  </div>
-);
+export const NavigationBar = ({ currentView, onChange, onHomeClick }: { currentView: string, onChange: (v: any) => void, onHomeClick?: () => void }) => {
+  const navItems = [
+    { id: 'HOME', icon: Home, label: 'Главная', action: onHomeClick ? onHomeClick : () => onChange('HOME') },
+    { id: 'HISTORY', icon: HistoryIcon, label: 'История', action: () => onChange('HISTORY') },
+    { id: 'FAVORITES', icon: Heart, label: 'Избранное', action: () => onChange('FAVORITES') },
+    { id: 'PROFILE', icon: User, label: 'Профиль', action: () => onChange('PROFILE') },
+  ];
+
+  return (
+    <div className="fixed bottom-0 left-0 right-0 bg-surface/95 dark:bg-carddark/95 backdrop-blur-md border-t border-gray-200/50 dark:border-gray-800 pb-safe pt-2 z-50">
+      <div className="flex justify-around items-center h-20 px-2">
+        {navItems.map((item) => {
+          const isActive = currentView === item.id;
+          return (
+            <button 
+              key={item.id}
+              onClick={() => { 
+                haptic('light'); 
+                item.action();
+              }}
+              className="flex flex-col items-center justify-center w-full gap-1 group"
+              aria-label={item.label}
+            >
+              <div className={`relative px-5 py-1.5 rounded-full transition-all duration-300 ${isActive ? 'bg-indigo-100 dark:bg-indigo-900/50' : 'bg-transparent'}`}>
+                <item.icon 
+                  size={24} 
+                  strokeWidth={isActive ? 2.5 : 2}
+                  className={`transition-colors ${isActive ? 'text-primary' : 'text-gray-500 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-gray-200'}`} 
+                />
+              </div>
+              <span className={`text-[11px] font-medium transition-colors ${isActive ? 'text-primary' : 'text-gray-500 dark:text-gray-400'}`}>
+                {item.label}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
 
 export const Header = ({ title, showBack, onBack, isDarkMode, toggleTheme, onChangeView }: any) => (
-  <header className="sticky top-0 bg-gray-50/80 dark:bg-darkbg/80 backdrop-blur-md z-40 px-5 py-4 flex items-center justify-between">
-    <div className="flex items-center gap-3">
+  <header className="sticky top-0 bg-surface/90 dark:bg-darkbg/90 backdrop-blur-md z-40 px-5 pt-safe pb-4 flex items-center justify-between border-b border-transparent transition-all">
+    <div className="flex items-center gap-4 w-full">
       {showBack ? (
         <button 
           onClick={() => { haptic('light'); onBack(); }}
-          className="p-2 -ml-2 rounded-full hover:bg-white dark:hover:bg-gray-800 transition-all shadow-sm border border-transparent hover:border-gray-100 dark:hover:border-gray-700"
+          className="p-2 -ml-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
           aria-label="Назад"
         >
-          <ArrowLeft size={22} className="text-gray-700 dark:text-gray-200" />
+          <ArrowLeft size={24} className="text-gray-700 dark:text-gray-200" />
         </button>
       ) : (
-        <div className="p-1.5 bg-primary rounded-lg text-white shadow-lg shadow-primary/30">
-           <Leaf size={18} fill="currentColor" />
-        </div>
+        <div className="w-2"></div> // Spacer for alignment if no back button
       )}
-      <h1 className="text-xl font-bold text-gray-800 dark:text-white truncate max-w-[200px] tracking-tight">{title}</h1>
+      
+      <h1 className={`text-2xl font-bold text-gray-900 dark:text-white tracking-tight flex-1 ${showBack ? 'text-left' : 'text-left -ml-2'}`}>
+        {title}
+      </h1>
     </div>
-    
-    {/* Right side Profile button removed as requested */}
-    <div className="w-8"></div>
   </header>
 );
 
@@ -97,7 +95,7 @@ export const OnboardingModal = ({ onComplete }: { onComplete: () => void }) => {
   return (
     <div className="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm flex items-center justify-center p-6">
       <motion.div 
-        className="bg-white dark:bg-carddark rounded-3xl p-8 max-w-sm w-full shadow-2xl relative"
+        className="bg-surface dark:bg-carddark rounded-[2rem] p-8 max-w-sm w-full shadow-2xl relative"
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
       >
